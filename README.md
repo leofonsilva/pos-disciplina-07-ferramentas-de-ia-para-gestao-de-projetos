@@ -1,0 +1,1 @@
+# pos-disciplina-07-ferramentas-de-ia-para-gestao-de-projetos
