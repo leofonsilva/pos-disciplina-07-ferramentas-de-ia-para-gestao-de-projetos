@@ -61,7 +61,7 @@ A partir do backlog produzido no módulo anterior, o Backlog Scorer aplica os fr
 
 **Arquitetura:**
 ```
-Backlog Priorizado (Módulo 1)
+Backlog Priorizado
     ↓
 Backlog Scorer (LLM + Contexto Estratégico)
     ├─ Filtro: MoSCoW (Must/Should/Could/Won't)
@@ -71,4 +71,41 @@ Backlog Scorer (LLM + Contexto Estratégico)
     └─ Saída: Ranking Priorizado + Recomendações
     ↓
 Backlog Priorizado + Flags (Pronto para Cronograma)
+```
+
+### Módulo 3: Cronograma, Capacidade e Alocação Assistidos
+
+#### **Projeto:** [Conecta Cargas - Scheduling Assistant](module-3)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **Scheduling Prompt** - Estruturação de contexto para planejamento de cronograma
+- **Análise What-If** - Simulação de cenários futuros para antecipar riscos
+
+**Conceitos abordados:**
+- **Mapeamento Preditivo de Dependências:** Classificação de dependências em três grupos - técnicas (funcionalidade depende da conclusão de outra), de recursos (mesmo profissional especializado) e externas (fornecedores, aquisições, aprovações regulatórias). A IA analisa o conteúdo das User Stories para identificar dependências não documentadas.
+- **Overcommitment:** Planejamento que compromete 100% da capacidade da equipe, sem margem para imprevistos (defeitos, incidentes, reuniões, suporte, férias). A prática leva a atalhos, débito técnico e perda de qualidade.
+- **Capacidade Nominal vs. Capacidade Real:** Uso de fator de utilização (ex: 65% da capacidade nominal disponível para novas funcionalidades) para reservar tempo para atividades inevitáveis do cotidiano (suporte, correções, revisões, refinamentos).
+- **Análise What-If:** Simulação de cenários (ex: férias de desenvolvedor, atraso de fornecedor, antecipação de módulo) para recalcular datas, identificar impactos em cascata e evidenciar trade-offs antes da execução.
+- **Enabler Tasks:** Tarefas habilitadoras identificadas automaticamente pela IA para iniciar processos de aquisição ou preparação de infraestrutura antes que se tornem bloqueios (ex: compra de sensores IoT).
+- **Decomposição de Dependências:** Nem toda dependência bloqueia integralmente uma funcionalidade. A IA identifica oportunidades de entregar versões incrementais que geram valor imediato enquanto componentes restantes continuam em desenvolvimento.
+- **Caminho Crítico:** Sequência de atividades cujo atraso impacta diretamente a data final de entrega. A IA recalcula automaticamente sempre que ocorrem alterações no projeto.
+
+**Aplicação prática:**
+No contexto da Conecta Cargas, a equipe possui capacidade nominal de 35 Story Points por sprint, com fator de utilização de 65% (aproximadamente 22 pontos efetivos). O cronograma considera dependências como a necessidade de sensores IoT (prazo de 60 dias), que bloqueiam funcionalidades como manutenção preditiva e monitoramento de temperatura. A IA distribui as funcionalidades ao longo de 6 sprints (12 semanas), antecipando os alertas de velocidade (sem dependência de hardware) e utilizando sprints intermediárias para preparar infraestrutura, contratos de API e simuladores para os sensores. A funcionalidade de manutenção preditiva é identificada como inviável no MVP, pois mesmo após a chegada do hardware, o algoritmo necessita de 30 dias de dados históricos para treinamento. O cronograma propõe como alternativa o uso de alertas de velocidade como indicador indireto de desgaste operacional.
+
+**Arquitetura:**
+```
+Backlog Priorizado + Dependências + Contexto da Equipe
+    ↓
+Scheduling Prompt (LLM + Temperatura Baixa)
+    ├─ Contexto: Capacidade da equipe (especializações, férias, feriados)
+    ├─ Contexto: Fator de utilização (65% disponível para novas funcionalidades)
+    ├─ Contexto: Dependências (técnicas, recursos, externas)
+    ├─ Contexto: Restrições estratégicas (MVP em 12 semanas, demo na Sprint 3)
+    ├─ Cálculo: Capacidade por sprint (22 pts normal / 18 pts com feriado)
+    ├─ Análise: Mapeamento preditivo de dependências (grafo textual)
+    └─ Geração: Cronograma adaptativo + Estratégias de contorno
+    ↓
+Cronograma Executável + Análise What-If (Pronto para Estimativas)
 ```
