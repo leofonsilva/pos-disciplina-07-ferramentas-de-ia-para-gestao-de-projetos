@@ -38,3 +38,37 @@ Requirements Copilot (LLM + System Prompt)
     ↓
 Backlog Estruturado + Lista de Pendências (Pronto para Jira/Refinamento)
 ```
+
+### Módulo 2: Priorização Inteligente de Backlog
+
+#### **Projeto:** [Conecta Cargas - Backlog Scorer](module-2)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **Backlog Scorer** - Aplicação de frameworks de priorização com suporte da IA
+
+**Conceitos abordados:**
+- **MoSCoW:** Framework de classificação em quatro categorias (Must Have, Should Have, Could Have, Won't Have) para filtrar o backlog antes da priorização detalhada.
+- **RICE Score:** Método de priorização baseado em quatro dimensões - Reach (alcance), Impact (impacto), Confidence (confiança) e Effort (esforço). Funcionalidades com alto impacto, grande alcance, alta confiança e baixo esforço recebem pontuações mais altas.
+- **WSJF (Weighted Shortest Job First):** Framework que prioriza com base no custo do atraso (Cost of Delay) dividido pelo esforço. Composto por três dimensões: valor de negócio, criticidade temporal e redução de riscos/criação de oportunidades.
+- **HIPPO (Highest Paid Person's Opinion):** Conceito que descreve decisões baseadas em hierarquia em vez de dados, evitado pela adoção de frameworks objetivos.
+- **Flags de Atenção:** Sinalizações geradas pelo Backlog Scorer para identificar riscos, dependências e inconsistências que precisam ser tratadas antes do desenvolvimento, como dependências de hardware, metas sem dados históricos suficientes ou falta de evidência de contribuição para objetivos estratégicos.
+- **Curadoria do Ranking:** Verificação manual de Reach (com dados reais), dependências técnicas não capturadas, revisão de funcionalidades com alta confiança e análise de todas as flags geradas antes da aprovação.
+- **Calibração:** Substituição de estimativas genéricas por evidências de dados reais (analytics, pesquisas com usuários, indicadores financeiros). Em projetos em cold start, utiliza-se benchmarks de domínio e referências públicas (Gartner, Forrester).
+
+**Aplicação prática:**
+A partir do backlog produzido no módulo anterior, o Backlog Scorer aplica os frameworks de priorização no contexto da Conecta Cargas. O processo começa com a filtragem MoSCoW, seguida pela aplicação simultânea de RICE e WSJF. O modelo recebe o contexto estratégico do projeto (OKRs, restrições operacionais, dependências externas) para produzir estimativas mais consistentes. Diferentes frameworks produzem rankings distintos para o mesmo backlog - enquanto o RICE identifica onde o investimento produz maior retorno, o WSJF responde quais iniciativas não podem esperar. O resultado inclui flags de atenção (ex: dependência de hardware para manutenção preditiva, falta de dados históricos para meta de precisão de 80%) e recomendações para aquisição antecipada de equipamentos antes da alocação em sprints.
+
+**Arquitetura:**
+```
+Backlog Priorizado (Módulo 1)
+    ↓
+Backlog Scorer (LLM + Contexto Estratégico)
+    ├─ Filtro: MoSCoW (Must/Should/Could/Won't)
+    ├─ Cálculo: RICE Score (Reach, Impact, Confidence, Effort)
+    ├─ Cálculo: WSJF (Cost of Delay / Effort)
+    ├─ Geração: Flags de Atenção e Riscos
+    └─ Saída: Ranking Priorizado + Recomendações
+    ↓
+Backlog Priorizado + Flags (Pronto para Cronograma)
+```
