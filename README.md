@@ -41,7 +41,7 @@ Backlog Estruturado + Lista de Pendências (Pronto para Jira/Refinamento)
 
 ### Módulo 2: Priorização Inteligente de Backlog
 
-#### **Projeto:** [Conecta Cargas - Backlog Scorer](module-2)
+#### **Projeto:** [Conecta Cargas - Backlog Scorer](module-02)
 
 **Tecnologias utilizadas:**
 - **LLM (Large Language Model)** - Motor com raciocínio estruturado
@@ -75,7 +75,7 @@ Backlog Priorizado + Flags (Pronto para Cronograma)
 
 ### Módulo 3: Cronograma, Capacidade e Alocação Assistidos
 
-#### **Projeto:** [Conecta Cargas - Scheduling Assistant](module-3)
+#### **Projeto:** [Conecta Cargas - Scheduling Assistant](module-03)
 
 **Tecnologias utilizadas:**
 - **LLM (Large Language Model)** - Motor com raciocínio estruturado
@@ -112,7 +112,7 @@ Cronograma Executável + Análise What-If (Pronto para Estimativas)
 
 ### Módulo 4: Estimativas e Previsões
 
-#### **Projeto:** [Conecta Cargas - Probability Forecast](module-4)
+#### **Projeto:** [Conecta Cargas - Probability Forecast](module-04)
 
 **Tecnologias utilizadas:**
 - **LLM (Large Language Model)** - Motor com raciocínio estruturado
@@ -147,4 +147,42 @@ Probability Forecast Prompt (LLM + Temperatura Baixa)
     └─ Adaptação: Relatórios para diferentes audiências
     ↓
 Previsões Probabilísticas + Riscos Identificados (Pronto para Monitoramento)
+```
+
+### Módulo 5: Riscos e Mitigações com AIOps de Projeto
+
+#### **Projeto:** [Conecta Cargas - Risk Monitor](module-05)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **Risk Monitor** - Monitoramento contínuo de indicadores de fluxo para identificação de anomalias
+- **AIOps (Artificial Intelligence for IT Operations)** - Princípios de monitoramento automatizado aplicados à gestão de projetos
+
+**Conceitos abordados:**
+- **AIOps Aplicado a Projetos:** Transporte da abordagem de monitoramento de infraestrutura (logs, métricas, eventos) para o gerenciamento de projetos, utilizando dados do Jira (backlog, estados de User Stories, transições, bugs, históricos de alterações) como fonte contínua de informações sobre a saúde do projeto.
+- **Lead Time:** Tempo total entre a entrada de uma história no backlog e sua conclusão. Aumento consistente indica que o volume de trabalho em andamento cresce mais rápido que a capacidade de entrega.
+- **Cycle Time:** Tempo efetivo de desenvolvimento (desde o início do trabalho até a conclusão). Comparação com Lead Time permite identificar se o gargalo está na implementação (Cycle Time alto) ou em etapas anteriores/esperas (Lead Time alto, Cycle Time estável).
+- **Taxa de Bugs por Sprint:** Comparação entre defeitos abertos e resolvidos. Crescimento contínuo do saldo de bugs indica que a dívida de qualidade está aumentando, consumindo capacidade que deveria ser dedicada a novas funcionalidades.
+- **Frequência de Alterações em User Stories:** Acompanhamento de mudanças em descrições, critérios de aceite ou escopo após o início da sprint. Alta frequência indica **scope creep** e requisitos insuficientemente refinados.
+- **Work in Progress (WIP):** Excesso de trabalho em progresso aumenta filas internas e reduz previsibilidade.
+- **Cockpit de Riscos:** Dashboard estruturado por componentes (fluxo/eficiência, qualidade do produto, dependências externas, escopo/previsibilidade) que consolida indicadores, tendências e contexto operacional para classificar a severidade dos riscos.
+- **Plano de Mitigação:** Estratégias proporcionais à anomalia encontrada, como **Stop Starting, Start Finishing** (interromper entrada de novos itens e focar na conclusão dos já iniciados), redução de limites de WIP, fortalecimento da **Definition of Ready** para funcionalidades com dependências externas, e estabelecimento de critérios objetivos para medir o sucesso da mitigação.
+
+**Aplicação prática:**
+No contexto da Conecta Cargas, durante a quinta sprint, o Risk Monitor analisa dados históricos das quatro primeiras sprints. O Lead Time cresceu de 6 para 11 dias, enquanto o Cycle Time permaneceu estável, indicando gargalo em esperas (dependências externas), não em perda de produtividade. O saldo de bugs cresce continuamente (novos bugs surgem mais rápido que sua correção). Funcionalidades como score de comportamento do motorista permanecem bloqueadas por dependência de hardware. O cockpit classifica o risco como elevado e recomenda ações como reduzir WIP, fortalecer Definition of Ready (histórias só entram na sprint com dependências resolvidas) e iniciar planos de contingência para a apresentação executiva, que ocorrerá na mesma sprint prevista para a chegada do hardware, sem margem para testes e validação.
+
+**Arquitetura:**
+```
+Dados Históricos do Jira (4 sprints)
+    ↓
+Risk Monitor (LLM + Indicadores de Fluxo)
+    ├─ Métrica: Lead Time (6 → 11 dias) vs. Cycle Time (estável)
+    ├─ Métrica: Taxa de Bugs (abertos > resolvidos)
+    ├─ Métrica: Frequência de Alterações (scope creep)
+    ├─ Métrica: Work in Progress (excesso)
+    ├─ Análise: Padrões de degradação (tendências)
+    ├─ Classificação: Cockpit de Riscos por componente
+    └─ Geração: Plano de Mitigação (Stop Starting, Start Finishing, Definition of Ready)
+    ↓
+Riscos Identificados + Ações de Mitigação (Pronto para Governança)
 ```
