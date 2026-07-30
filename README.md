@@ -109,3 +109,42 @@ Scheduling Prompt (LLM + Temperatura Baixa)
     ↓
 Cronograma Executável + Análise What-If (Pronto para Estimativas)
 ```
+
+### Módulo 4: Estimativas e Previsões
+
+#### **Projeto:** [Conecta Cargas - Probability Forecast](module-4)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **Probability Forecast Prompt** - Geração de previsões probabilísticas a partir de estimativas individuais
+- **Estimativa de Três Pontos** - Técnica baseada em cenários otimista, mais provável e pessimista
+- **Distribuição PERT** - Cálculo de estimativa ponderada que atribui maior peso ao cenário mais provável
+- **Simulação de Monte Carlo** - Técnica estatística que executa milhares de simulações para gerar distribuições de probabilidade
+
+**Conceitos abordados:**
+- **Planning Fallacy (Falácia do Planejamento):** Tendência cognitiva humana a subestimar tempo, custo e complexidade de atividades futuras. Mesmo equipes experientes continuam produzindo estimativas otimistas, independentemente da competência técnica.
+- **Estimativa Pontual vs. Probabilística:** Substituição de datas fixas por intervalos de confiança (percentis P50, P85, P95) que comunicam explicitamente o risco associado ao cronograma.
+- **Percentis de Confiança:**
+  - **P50 (Mediana):** 50% das simulações terminam até esta data. Risco significativo de atraso.
+  - **P85:** 85% das simulações terminam até esta data. Nível de confiança recomendado para comunicação com clientes.
+  - **P95:** 95% das simulações terminam até esta data. Postura conservadora para projetos críticos.
+- **Restrições Determinísticas vs. Variabilidade:** A simulação de Monte Carlo representa apenas a incerteza incorporada ao modelo. Riscos externos (ex: atraso de fornecedor) tratados como datas fixas precisam ser gerenciados separadamente.
+- **SLO (Service Level Objective) Aplicado a Projetos:** Uso de percentis de probabilidade para comunicar confiança em entregas, similar ao uso de percentis de latência em engenharia de confiabilidade.
+- **Adaptação de Linguagem por Audiência:** Comunicação de resultados estatísticos de maneiras diferentes para equipe técnica (variâncias, distribuições PERT), gestores de produto (níveis de confiança, fatores de influência) e executivos (decisões de negócio, investimentos necessários).
+
+**Aplicação prática:**
+No contexto da Conecta Cargas, cada User Story recebe três cenários de estimativa (ex: alerta de velocidade com 2 semanas otimista, 3 semanas mais provável, 5 semanas pessimista). A IA calcula automaticamente a distribuição PERT de cada história, incluindo variância e desvio padrão. A simulação de Monte Carlo (10.000 execuções) sobre o backlog do MVP revela que o P50 é de aproximadamente 12,5 semanas, enquanto o P85 é de 13,1 semanas e o P95 de 13,4 semanas. A pequena diferença entre os percentis não indica baixa incerteza, mas a presença de uma restrição dominante: o lead time do fornecedor de hardware (60 dias) tratado como data fixa, que domina a variabilidade do cronograma. Funcionalidades com maior incerteza técnica (ex: score de comportamento do motorista com integração a acelerômetros desconhecidos) são identificadas como candidatas a spikes técnicos antes da implementação.
+
+**Arquitetura:**
+```
+Cronograma + Estimativas de Três Pontos + Restrições Externas
+    ↓
+Probability Forecast Prompt (LLM + Temperatura Baixa)
+    ├─ Entrada: User Stories com cenários (Otimista, Mais Provável, Pessimista)
+    ├─ Cálculo: Distribuição PERT por história (Média Ponderada, Variância, Desvio)
+    ├─ Simulação: Monte Carlo (milhares de execuções do cronograma)
+    ├─ Geração: Percentis de confiança (P50, P85, P95)
+    └─ Adaptação: Relatórios para diferentes audiências
+    ↓
+Previsões Probabilísticas + Riscos Identificados (Pronto para Monitoramento)
+```
