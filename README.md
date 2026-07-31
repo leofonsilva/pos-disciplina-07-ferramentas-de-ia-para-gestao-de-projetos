@@ -5,7 +5,7 @@ Pendente...
 
 ## Módulos
 
-### Módulo 1: Planejamento e Escopo com IA (Requirements Copilot)
+### Módulo 01: Planejamento e Escopo com IA (Requirements Copilot)
 
 #### **Projeto:** [Conecta Cargas - Requirements Copilot](module-01)
 
@@ -39,7 +39,7 @@ Requirements Copilot (LLM + System Prompt)
 Backlog Estruturado + Lista de Pendências (Pronto para Jira/Refinamento)
 ```
 
-### Módulo 2: Priorização Inteligente de Backlog
+### Módulo 02: Priorização Inteligente de Backlog
 
 #### **Projeto:** [Conecta Cargas - Backlog Scorer](module-02)
 
@@ -73,7 +73,7 @@ Backlog Scorer (LLM + Contexto Estratégico)
 Backlog Priorizado + Flags (Pronto para Cronograma)
 ```
 
-### Módulo 3: Cronograma, Capacidade e Alocação Assistidos
+### Módulo 03: Cronograma, Capacidade e Alocação Assistidos
 
 #### **Projeto:** [Conecta Cargas - Scheduling Assistant](module-03)
 
@@ -110,7 +110,7 @@ Scheduling Prompt (LLM + Temperatura Baixa)
 Cronograma Executável + Análise What-If (Pronto para Estimativas)
 ```
 
-### Módulo 4: Estimativas e Previsões
+### Módulo 04: Estimativas e Previsões
 
 #### **Projeto:** [Conecta Cargas - Probability Forecast](module-04)
 
@@ -149,7 +149,7 @@ Probability Forecast Prompt (LLM + Temperatura Baixa)
 Previsões Probabilísticas + Riscos Identificados (Pronto para Monitoramento)
 ```
 
-### Módulo 5: Riscos e Mitigações com AIOps de Projeto
+### Módulo 05: Riscos e Mitigações com AIOps de Projeto
 
 #### **Projeto:** [Conecta Cargas - Risk Monitor](module-05)
 
@@ -185,4 +185,47 @@ Risk Monitor (LLM + Indicadores de Fluxo)
     └─ Geração: Plano de Mitigação (Stop Starting, Start Finishing, Definition of Ready)
     ↓
 Riscos Identificados + Ações de Mitigação (Pronto para Governança)
+```
+
+### Módulo 06: Reuniões Turbinadas (Notas, AIs, Follow-ups)
+
+#### **Projeto:** [Conecta Cargas - Meeting Digest](module-06)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **Meeting Digest** - Automação de documentação de reuniões com síntese semântica
+- **Síntese Semântica** - Compreensão do significado das falas, identificando compromissos, decisões, riscos e questões não resolvidas
+
+**Conceitos abordados:**
+- **Síntese Semântica:** Diferente da transcrição literal que registra palavras exatas, a síntese compreende o significado das falas, identificando intenções, compromissos, decisões e contextos implícitos na conversa.
+- **Classificação Semântica:** Quatro categorias de informação extraídas automaticamente da reunião:
+  - **Compromissos de Ação:** Atividades assumidas por participantes com responsável, urgência e prazo.
+  - **Decisões:** Acordos estabelecidos que alteram formalmente o comportamento do projeto (ex: exclusão de funcionalidade, adoção de procedimento temporário).
+  - **Riscos e Impedimentos:** Fatores que bloqueiam o andamento do projeto (hardware indisponível, problemas de acesso, dependências).
+  - **Perguntas em Aberto:** Questões que permaneceram sem resposta, com indicação de quem deverá fornecer esclarecimentos.
+- **Rastreabilidade de Decisões:** Registro do contexto que justificou cada escolha, preservando o histórico de mudanças de escopo e permitindo auditoria futura.
+- **Payload Estruturado (JSON):** Artefato gerado automaticamente para integração com ferramentas como Jira, contendo campos como título, responsável, prioridade, prazo e descrição detalhada, pronto para consumo por APIs e webhooks.
+- **Protocolo de Auditoria da Ata:** Cinco etapas de curadoria antes da distribuição - leitura da tabela de ações em voz alta, revisão de responsáveis indefinidos, validação de decisões críticas com participantes, atribuição de responsáveis para perguntas em aberto, e verificação de informações implícitas não capturadas.
+- **Curadoria de Transcrição:** Revisão rápida da transcrição antes do processamento para corrigir nomes de pessoas, sistemas, componentes técnicos e termos específicos do domínio, evitando propagação de erros.
+
+**Aplicação prática:**
+Durante uma Sprint Review da Conecta Cargas, o Meeting Digest processa a transcrição da reunião. A IA identifica que o mesmo assunto (acelerômetros para cálculo do comportamento do motorista) evolui ao longo da conversa: inicialmente como problema técnico, depois como necessidade de cotação, culminando na decisão formal de iniciar a aquisição. O modelo consolida essa evolução em uma linha narrativa única, preservando o raciocínio coletivo. O resumo executivo destaca funcionalidades concluídas, itens bloqueados e mudanças de escopo (retorno do S05 por necessidade de apresentação executiva, criação do S06 solicitado pelo RH). A tabela de ações inclui responsáveis (Marcos estima S05, Ana Lima detalha requisitos) e a identificação de perguntas em aberto (prazo do fornecedor de hardware). O JSON gerado permite integração automática com Jira, mas apresenta lacunas como o prazo implícito de Ana Lima (não preenchido no campo estruturado) e uma decisão técnica (ajuste de timeout) não capturada, que exige curadoria manual.
+
+**Arquitetura:**
+```
+Áudio da Reunião
+    ↓
+Transcrição (Voz para Texto)
+    ↓
+Meeting Digest (LLM + Síntese Semântica)
+    ├─ Classificação: Compromissos de Ação (responsável, prazo, urgência)
+    ├─ Classificação: Decisões (acordos com justificativa e contexto)
+    ├─ Classificação: Riscos e Impedimentos (bloqueadores identificados)
+    ├─ Classificação: Perguntas em Aberto (dúvidas não resolvidas)
+    ├─ Geração: Resumo Executivo da Reunião
+    └─ Geração: Payload JSON (pronto para Jira/APIs)
+    ↓
+Curadoria Manual (Protocolo de Auditoria)
+    ↓
+Artefatos Estruturados (Ata, Ações, Decisões, Payload)
 ```
