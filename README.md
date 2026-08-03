@@ -229,3 +229,42 @@ Curadoria Manual (Protocolo de Auditoria)
     ↓
 Artefatos Estruturados (Ata, Ações, Decisões, Payload)
 ```
+
+### Módulo 07: Status Reports e Executive Summaries
+
+#### **Projeto:** [Conecta Cargas - Status Report Adaptativo](module-07)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **Status Report Prompt** - Geração automática de relatórios adaptados por audiência
+- **Status Report Adaptativo** - Personalização de linguagem, profundidade e foco para diferentes públicos
+
+**Conceitos abordados:**
+- **Status Report Adaptativo:** Princípio de adaptar o mesmo conjunto de informações para diferentes audiências (técnica, gerencial, executiva), preservando consistência dos dados mas alterando linguagem, nível de detalhe e foco da análise.
+- **Comunicação por Perfil de Audiência:**
+  - **Time Técnico:** Indicadores operacionais (Velocity, Lead Time, Cycle Time, Story Points, débito técnico, bloqueios). Linguagem técnica, formato de listas estruturadas. Foco em orientar o trabalho da próxima sprint.
+  - **Gestores de Projeto/Produto:** Percentual de conclusão, aderência ao cronograma, capacidade da equipe, riscos classificados por probabilidade e impacto, decisões pendentes. Linguagem gerencial com resumo executivo e tabelas de riscos.
+  - **Executivos e Clientes:** Retorno sobre investimento, impacto operacional, previsibilidade da entrega, cumprimento de objetivos estratégicos, marcos do projeto. Linguagem de negócio, formato conciso (máximo 1 página). A premissa: quanto maior o nível hierárquico, menor o tempo disponível para leitura.
+- **Divergências de Interpretação:** Diferentes classificações de status (ex: vermelho vs. amarelo) podem ser igualmente defensáveis a partir dos mesmos dados, dependendo do contexto estratégico. A curadoria deve compreender o significado que cada classificação comunica aos stakeholders.
+- **Curadoria do Status Report:** Verificações antes da distribuição - validar números (arredondamentos incorretos), adequar linguagem ao público (evitar termos técnicos no executivo), limitar decisões a 2-3 itens críticos, ajustar tom excessivamente negativo, e garantir que todo risco tenha ação correspondente e responsável.
+- **Gestão de Portfólio:** Aplicação do mesmo Status Report Prompt a cada projeto individualmente, consolidando os relatórios executivos em um Executive Summary de portfólio que identifica tendências comuns, iniciativas críticas e prioridades para a alta gestão.
+
+**Aplicação prática:**
+No fechamento da Sprint 4 da Conecta Cargas, os dados brutos são: velocidade de 22 Story Points, Lead Time de 10 dias, 11 defeitos registrados (6 resolvidos), bloqueio de hardware, queda na previsibilidade. O Status Report Adaptativo gera três versões:
+- **Time Técnico:** Foco no aumento do Lead Time, saldo de defeitos e excesso de WIP. Recomenda limitar itens simultâneos por desenvolvedor e priorizar correção do defeito crítico que afeta veículos antigos.
+- **Gestor do Projeto:** Classifica o projeto em status amarelo, comunica risco moderado de atraso no MVP e apresenta a principal decisão necessária: aprovar aquisição de hardware ou remover funcionalidade de score de comportamento do escopo.
+- **Diretoria:** Informa que a funcionalidade principal está operacional, confirma a demonstração para as próximas semanas e comunica risco moderado no fornecimento de equipamentos, com ações em andamento para resolução.
+
+**Arquitetura:**
+```
+Dados da Sprint + Indicadores de Fluxo + Decisões Registradas
+    ↓
+Status Report Prompt (LLM + Temperatura Baixa)
+    ├─ Versão Técnica: Velocidade, Lead Time, Cycle Time, WIP, Defeitos, Ações para a Sprint
+    ├─ Versão Gerencial: Status (Verde/Amarelo/Vermelho), Riscos, Decisões Pendentes, Aderência ao Cronograma
+    └─ Versão Executiva: Valor Entregue, Riscos Estratégicos, Marcos, Decisões de Alto Nível
+    ↓
+Curadoria (Validação de Números, Linguagem, Tom e Decisões)
+    ↓
+Relatórios Adaptados + (Opcional) Executive Summary de Portfólio
+```
