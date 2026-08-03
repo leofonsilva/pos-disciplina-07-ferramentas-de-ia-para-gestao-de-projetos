@@ -268,3 +268,47 @@ Curadoria (Validação de Números, Linguagem, Tom e Decisões)
     ↓
 Relatórios Adaptados + (Opcional) Executive Summary de Portfólio
 ```
+
+### Módulo 08: Governança, Compliance e Qualidade
+
+#### **Projeto:** [Conecta Cargas - Governance as Code](module-08)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **Compliance Prompt** - Geração inteligente de checklists de conformidade adaptados ao contexto do projeto
+- **Danger.js** - Ferramenta para automação de verificações de conformidade em Pull Requests
+- **Governança como Código (Governance as Code)** - Transformação de políticas organizacionais em regras executadas automaticamente no pipeline de integração contínua
+
+**Conceitos abordados:**
+- **Governança como Código:** Princípio de descrever regras de conformidade de maneira estruturada e executá-las automaticamente no pipeline sempre que ocorre uma alteração relevante no projeto. A conformidade deixa de ser uma atividade posterior à implementação e passa a fazer parte do processo de desenvolvimento.
+- **Checklist de Conformidade Adaptativo:** O modelo recebe informações sobre o contexto específico da aplicação (domínio de negócio, requisitos regulatórios, arquitetura, maturidade da equipe, políticas internas) e produz checklists personalizados, divididos em três categorias:
+  - **Bloqueadores de Deploy:** Condições que impedem a liberação da versão se não atendidas (ex: conformidade com LGPD, aprovações formais, comunicação explícita de limitações técnicas).
+  - **Verificações Operacionais:** Boas práticas recomendadas (ex: plano de comunicação, monitoramento pós-deploy, plano de reversão, gestão de segredos).
+  - **Registros Obrigatórios para Auditoria:** Documentação que preserva rastreabilidade (ex: base legal para tratamento de dados, registro de bugs conhecidos, identificadores de commit e versões).
+- **Trilha de Auditoria:** Conexão entre requisito, decisão, implementação e implantação - cada alteração deve possuir uma origem claramente identificável, permitindo rastrear por que uma funcionalidade foi implementada, qual Pull Request a realizou e quem autorizou sua implantação.
+- **Danger.js:** Executado durante a análise de Pull Requests, permite escrever regras em JavaScript para verificar automaticamente diversos aspectos de conformidade (obrigatoriedade de vínculo com Jira, aprovações obrigatórias para componentes críticos, cobertura de testes, tamanho de Pull Requests).
+- **Separação entre Lógica e Configuração:** Princípio da engenharia de software aplicado à governança - o comportamento do mecanismo permanece estável, enquanto parâmetros específicos do projeto (arquivos críticos, limites) podem ser ajustados sem alterar o código das validações.
+- **Contextualização de Riscos:** A IA produz verificações específicas para o cenário apresentado (ex: devido ao bug S4-10 que afeta 43 veículos, o modelo exige que o sistema informe explicitamente essa condição no painel para evitar falsos negativos).
+
+**Aplicação prática:**
+Durante o primeiro deploy em produção do módulo de alertas de velocidade da Conecta Cargas, o Compliance Prompt recebe informações sobre o contexto (monitoramento de GPS em tempo real, dados de localização de motoristas, componentes envolvidos, stakeholders responsáveis, histórico do bug S4-10). O modelo gera um checklist com bloqueadores como conformidade com LGPD (documentação da base legal para tratamento de dados), aprovações formais (operacional, técnica, jurídica), e uma verificação específica: como 43 veículos permanecem sem suporte, o sistema deve informar explicitamente essa condição. O checklist também inclui recomendações operacionais (plano de comunicação, monitoramento pós-deploy, plano de rollback) e registros para auditoria. Simultaneamente, o modelo gera um arquivo Danger.js com regras como exigência de identificador do Jira nos Pull Requests, aprovação dupla para alterações em componentes de GPS, alertas para redução de cobertura de testes e identificação de PRs excessivamente grandes.
+
+**Arquitetura:**
+```
+Contexto do Deploy + Políticas Organizacionais + Histórico do Projeto
+    ↓
+Compliance Prompt (LLM)
+    ├─ Bloqueadores de Deploy (LGPD, aprovações, comunicação de limitações)
+    ├─ Verificações Operacionais (comunicação, monitoramento, rollback, segredos)
+    └─ Registros para Auditoria (base legal, bugs conhecidos, versões)
+    ↓
+Checklist de Conformidade
+    ↓
+(Paralelo) Geração de Regras Danger.js
+    ├─ Obrigatoriedade: ID do Jira nos Pull Requests
+    ├─ Aprovação: 2 aprovações para componentes GPS
+    ├─ Alerta: Redução de cobertura de testes
+    └─ Alerta: Pull Requests excessivamente grandes
+    ↓
+Pipeline de CI/CD com Governança Automatizada
+```
