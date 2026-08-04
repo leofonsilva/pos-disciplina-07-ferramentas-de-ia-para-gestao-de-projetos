@@ -357,3 +357,49 @@ Criação de Card no Jira + Notificação no Slack
     ↓
 Sincronização Jira → Slack (alterações de status propagadas)
 ```
+
+### Módulo 10: Portfólio e OKRs com IA
+
+#### **Projeto:** [Conecta Cargas - OKR Aligner](module-10)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **OKR Aligner Prompt** - Validação de OKRs e análise de alinhamento entre backlog e estratégia
+
+**Conceitos abordados:**
+- **Output vs. Outcome:** Output corresponde ao que a equipe produz (funcionalidades, APIs, histórias entregues). Outcome representa o impacto dessas entregas sobre o negócio (redução de acidentes, aumento de satisfação, redução de custos). O sucesso do projeto deve ser medido pelo outcome, não apenas pelo output.
+- **OKRs (Objectives and Key Results):** Mecanismo para conectar o trabalho cotidiano da equipe aos objetivos estratégicos da organização. Composto por dois elementos - o Objective (descrição qualitativa do estado desejado) e os Key Results (indicadores quantitativos, mensuráveis e verificáveis que comprovam que o objetivo foi atingido).
+- **Erro Comum em OKRs:** Utilizar tarefas como Key Results (ex: "implementar módulo de alertas"). O correto é formular resultados de negócio (ex: "reduzir em 20% os acidentes relacionados ao excesso de velocidade").
+- **Validação de Qualidade de OKRs:** Cinco critérios verificados pelo modelo - Objective representa estado desejado (não tarefa), Key Results são mensuráveis, existe prazo claramente definido, existe baseline (valor inicial), existe responsável definido.
+- **Análise de Alinhamento:** Classificação de cada User Story em três categorias:
+  - **Diretamente Alinhada:** Contribui de maneira mensurável para pelo menos um Key Result.
+  - **Indiretamente Alinhada:** Não impacta diretamente os indicadores, mas viabiliza outra iniciativa que possui essa contribuição.
+  - **Não Alinhada:** Não apresenta conexão visível com nenhum dos OKRs vigentes.
+- **Destino de Histórias Não Alinhadas:** Remoção do backlog, transferência para backlog de inovação, ou revisão dos próprios OKRs (se a funcionalidade revelar prioridade estratégica não contemplada).
+- **Check-in de OKRs:** Acompanhamento periódico onde o modelo recebe valores atualizados dos indicadores, analisa tendências, projeta comportamento futuro e identifica Key Results com risco de não serem atingidos.
+- **Alavancas de Resultado:** A IA não apenas informa o risco de descumprimento do Key Result, mas procura compreender quais fatores explicam o comportamento (ex: funcionalidade entregue, mas apenas 60% dos motoristas treinados) e recomenda ações para modificar o indicador.
+- **Sinais de Maturidade em OKRs:** A equipe questiona espontaneamente a relação entre novas demandas e OKRs, discussões incorporam naturalmente os Key Results, alinhamento estratégico torna-se filtro permanente de priorização.
+- **Sinal de Alerta:** Quando todos os OKRs terminam com índices > 90%, provavelmente as metas são excessivamente conservadoras. O modelo incorpora verificação do grau de ambição dos Key Results.
+
+**Aplicação prática:**
+No contexto da Conecta Cargas, um Key Result estabelecido é reduzir em 20% o número de sinistros relacionados ao excesso de velocidade até setembro. Durante check-in em julho, observa-se redução acumulada de apenas 8%. O modelo identifica que, no ritmo atual, a meta não será atingida. Ao cruzar informações, descobre que apenas 60% dos motoristas receberam treinamento para utilização da nova funcionalidade de alertas. A recomendação gerada não é investir em desenvolvimento de software, mas priorizar o programa de treinamento dos motoristas. Simultaneamente, o OKR Aligner analisa o backlog e classifica cada User Story - funcionalidades de alertas de velocidade como diretamente alinhadas, painel de motoristas como indiretamente alinhado (viabiliza treinamento), e relatórios de cores de veículos como não alinhados, candidatos à reavaliação.
+
+**Arquitetura:**
+```
+OKRs Definidos + Backlog do Projeto
+    ↓
+OKR Aligner Prompt (LLM)
+    ├─ Validação: Qualidade dos OKRs (mensuráveis, prazo, baseline, responsável)
+    ├─ Análise: Alinhamento do Backlog (Direto, Indireto, Não Alinhado)
+    └─ Geração: Recomendações (remover, transferir, revisar OKRs)
+    ↓
+Backlog Classificado + OKRs Validados
+    ↓
+(Paralelo) Check-in Periódico de OKRs
+    ├─ Entrada: Valores atualizados dos Key Results
+    ├─ Análise: Tendências e projeções
+    ├─ Identificação: Key Results em risco
+    └─ Geração: Recomendações de ações corretivas (ex: treinamento de usuários)
+    ↓
+Acompanhamento Contínuo + Decisões Estratégicas
+```
