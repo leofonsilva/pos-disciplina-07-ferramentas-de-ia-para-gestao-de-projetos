@@ -312,3 +312,48 @@ Checklist de Conformidade
     ↓
 Pipeline de CI/CD com Governança Automatizada
 ```
+
+### Módulo 09: Automação em Jira/Asana/Trello/Notion/Slack
+
+#### **Projeto:** [Conecta Cargas - Ecosystem Bot](module-09)
+
+**Tecnologias utilizadas:**
+- **LLM (Large Language Model)** - Motor com raciocínio estruturado
+- **Natural Language to Workflow Parser** - Transformação de mensagens em linguagem natural em artefatos estruturados para ferramentas de gestão
+- **Webhooks** - Mecanismo de integração entre ferramentas para eventos e notificações
+
+**Conceitos abordados:**
+- **Ferramentas Conectadas vs. Ferramentas Integradas:** Ferramentas conectadas compartilham eventos (webhooks tradicionais), enquanto ferramentas integradas compartilham contexto - a informação é interpretada antes da ação, identificando natureza, domínio do problema e decisões automáticas sobre artefatos, plataformas e parâmetros.
+- **Natural Language to Workflow:** Princípio de permitir que o usuário se comunique em linguagem natural enquanto a IA transforma automaticamente essa comunicação em objetos estruturados compatíveis com as ferramentas de gestão (Jira, Slack, Notion). A mensagem deixa de ser apenas texto e passa a representar uma fonte estruturada de conhecimento.
+- **Parser Semântico:** Extração de estrutura semântica (identificação de entidades, intenções), classificação de prioridade (alta/média/baixa), reconhecimento de componentes mencionados, identificação de equipe responsável, e decisão sobre ações necessárias (criar card, abrir incidente, notificar gestor).
+- **Classificação de Mensagens:** O parser distingue entre bugs (prioridade alta, investigação), features (nova funcionalidade, planejamento), tasks (atividades operacionais) e perguntas (sem criação automática de cards até confirmação).
+- **Action Required Flag:** Campo obrigatório para mensagens contendo alternativas de decisão (ex: adiar deploy ou remover funcionalidade). Impede que o bot crie automaticamente cards operacionais para problemas que dependem de decisão gerencial estratégica.
+- **Recuperação de Contexto (RAG):** Para mensagens em threads (ex: respostas curtas como "pode fazer isso"), o bot recupera automaticamente as últimas mensagens da conversa para compreender o contexto completo antes do parsing.
+- **Trilha de Auditoria:** Registro estruturado de cada card criado automaticamente (data, canal de origem, identificador da mensagem, versão do prompt, resultado completo do modelo), estabelecendo rastreabilidade sobre como determinada atividade surgiu.
+- **Glossário de Jargões:** Manutenção de um glossário estruturado com termos internos da equipe (ex: P0, Sprint End, stand-up) incorporado automaticamente ao contexto do parser para melhor compreensão.
+- **Sincronização Jira ↔ Slack:** Propagação de alterações de status do Jira para canais do Slack, com separação de canais de comunicação e canais de acompanhamento automatizado para evitar fadiga de alertas.
+
+**Aplicação prática:**
+Na Conecta Cargas, três cenários demonstram o Natural Language to Workflow Parser:
+1. **Bug:** Mensagem "os alertas de velocidade pararam de chegar em Uberlândia, preciso investigar" - parser identifica bug, prioridade alta, componente de GPS, responsável vazio (pois a responsabilidade não foi explicitamente assumida), e gera descrição rica com pontos de investigação (rastreadores, MQTT, AWS Lambda, Firebase).
+2. **Feature com Prazo:** Mensagem "Carlos pediu antecipação do módulo de manutenção preditiva para antes do final do mês devido à revisão anual" - parser identifica nova funcionalidade prioritária, solicitante Carlos, prazo final do mês, mas responsável vazio (expressão "alguém pode pegar isso?" não assume responsabilidade).
+3. **Decisão Crítica:** Mensagem "deploy de sexta bloqueado porque módulo depende de hardware não entregue" com alternativas "adiar ou remover funcionalidade" - parser identifica criticidade máxima, mas ao analisar o resultado, percebe-se que o campo Action Required está vazio; o prompt é ajustado para preencher este campo automaticamente quando mensagens contêm alternativas de decisão, devolvendo a situação ao gestor para decisão manual.
+
+**Arquitetura:**
+```
+Mensagem em Linguagem Natural (Slack/Teams)
+    ↓
+Natural Language to Workflow Parser (LLM + Contexto)
+    ├─ Recuperação: Contexto da Thread (mensagens anteriores)
+    ├─ Classificação: Bug vs. Feature vs. Task vs. Pergunta
+    ├─ Extração: Prioridade, Componente, Responsável, Prazo
+    ├─ Decisão: Action Required? (sim/não)
+    ├─ Geração: Objeto Estruturado (JSON para Jira)
+    └─ (Opcional) Glossário de Jargões para melhor compreensão
+    ↓
+(Curadoria: Confirmação antes da criação do card)
+    ↓
+Criação de Card no Jira + Notificação no Slack
+    ↓
+Sincronização Jira → Slack (alterações de status propagadas)
+```
